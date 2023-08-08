@@ -1,0 +1,40 @@
+resources:
+  - name: git_repo_docker
+    type: GitRepo
+    configuration:
+      gitProvider: GitHub
+      path: Manokarthi2412/docker-validate
+      branches:
+        include: main
+  - name: build_info
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: mkartifactory
+  - name: output_build_info
+    type: BuildInfo
+pipelines:
+  - name: docker_build_pipeline
+    steps:
+      - name: docker_build_step
+        type: DockerBuild
+        configuration:
+          affinityGroup: docker_group
+          dockerFileLocation: .
+          dockerFileName: Dockerfile
+          dockerImageName: pipelines.jfrog.io/test-dockerlocal/dbp
+          dockerImageTag: ${run_number}
+          inputResources:
+            - name: git_repo_docker
+          integrations:
+            - name: mkartifactory
+      - name: docker_publish_step
+        type: DockerPush
+        configuration:
+          affinityGroup: docker_group
+          targetRepository: target-docker-repo
+          integrations:
+            - name: mkartifactory
+          inputSteps:
+            - name: docker_build_step
+          outputResources:
+            - name: output_build_info
