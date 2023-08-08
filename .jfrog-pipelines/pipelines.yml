@@ -2,7 +2,7 @@ resources:
   - name: git_repo_docker
     type: GitRepo
     configuration:
-      gitProvider: GitHub
+      gitProvider: mkGithub
       path: Manokarthi2412/docker-validate
       branches:
         include: main
@@ -37,4 +37,4 @@ pipelines:
           inputSteps:
             - name: docker_build_step
           outputResources:
-            - name: output_build_info
+            - name: dbp_image
