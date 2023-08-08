@@ -12,6 +12,9 @@ resources:
       sourceArtifactory: mkartifactory
   - name: output_build_info
     type: BuildInfo
+    configuration:
+      sourceArtifactory: myArtifactory
+      buildName: dbp_build
 pipelines:
   - name: docker_build_pipeline
     steps:
@@ -37,4 +40,4 @@ pipelines:
           inputSteps:
             - name: docker_build_step
           outputResources:
-            - name: dbp_image
+            - name: output_build_info
